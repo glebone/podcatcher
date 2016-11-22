@@ -1,0 +1,10 @@
+podcasts:
+    -
+        url: 'https://feeds.feedburner.com/dancarlin/history'
+        path: 'Radio-t'
+    -
+        url: 'http://feed.thisamericanlife.org/talpodcast'
+        path: 'Devzen'
+format: "{title}" #replace the ugly filenames with the title
+threads: 2 #number of podcasts to fetch at a time
+playlist: 'playlist.m3u' #create an m3u playlist in each podcast directory
