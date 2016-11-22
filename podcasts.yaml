@@ -1,9 +1,9 @@
 podcasts:
     -
-        url: 'https://feeds.feedburner.com/dancarlin/history'
+        url: 'http://feeds.rucast.net/radio-t'
         path: 'Radio-t'
     -
-        url: 'http://feed.thisamericanlife.org/talpodcast'
+        url: 'http://devzen.ru/feed/'
         path: 'Devzen'
 format: "{title}" #replace the ugly filenames with the title
 threads: 2 #number of podcasts to fetch at a time
