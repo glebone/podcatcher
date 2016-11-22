@@ -8,6 +8,7 @@ from urllib.parse import unquote, urlparse
 import sys
 from threading import Thread
 import yaml
+import argparse
 
 #we don't have to be able to parse dates
 try:
@@ -34,6 +35,9 @@ class Podcast:
         self.url = url
         self.path = path
 
+
+  
+
     def download(self):
         print("Downloading {}".format(self.url))
         os.makedirs(self.path, exist_ok=True)
@@ -41,10 +45,11 @@ class Podcast:
         r.encoding = 'utf-8' #requests tends to assume 8859-1 for some reason
         dom = parseString(r.text)
         enclosures = dom.getElementsByTagName('enclosure')
-        files = []
         for index, i in enumerate(reversed(enclosures)):
             attributes = {j: i.attributes[j].value for j in i.attributes.keys()}
+         
             item = i.parentNode
+         
             try:
                 attributes['title'] = item.getElementsByTagName('title')[0].firstChild.nodeValue
             except:
@@ -56,6 +61,7 @@ class Podcast:
                 except:
                     pass #ignore if it lacks a time
             attributes['index'] = index+1
+            files = []
             files.append(File(self, attributes))
         for i in files:
             if i.downloaded(): #skip any files we already have
@@ -112,13 +118,26 @@ class File:
             os.utime(self.path, (self.time, self.time))
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("home", nargs='?', help='podcasts home dir')
+    args = parser.parse_args()
     home = os.path.expanduser("~")
-    os.chdir(os.path.join(home, "podcasts"))
+    os.chdir(home)
     try:
         config = yaml.load(open('podcasts.yaml'))
     except:
         sys.stderr.write("Failed to load config file")
         sys.exit(1)
+    
+    try:
+        config = yaml.load(open('podcasts.yaml'))
+    except:
+        sys.stderr.write("Failed to load config file")
+        sys.exit(1)
+    if args.home :  
+        os.chdir(args.home)
+    else :
+        os.chdir(os.path.join(home, "podcasts"))
     podcasts = []
     for i in config['podcasts']:
         if 'path' not in i or 'url' not in i:
