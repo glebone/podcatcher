@@ -93,7 +93,7 @@ class File:
         filename, ext = os.path.splitext(filename)
         try:
             filename = podcast.format.format(filename = filename,
-                    title=attributes['title'],
+                    title=attributes['url'],
                     index = attributes['index'])
         except:
             pass #don't worry if the podcast lacks a format or we're missing necessary attributes
@@ -111,7 +111,7 @@ class File:
         return os.path.exists(self.path)
 
     def download(self):
-        print("Downloading {} from {}".format(self.path, self.url))
+        print("Downloading {}".format(self.path))
         request = requests.get(self.url)
         open(self.path, 'wb').write(request.content)
         if self.time:
